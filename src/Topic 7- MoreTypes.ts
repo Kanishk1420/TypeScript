@@ -42,11 +42,11 @@ function rbac(role: Role): void {
         case "user":
             console.log("User has limited access");
             break;
-        case "guest":
-            console.log("Guest has no access");
-            break;
+        default:
+        const check: never = role;
+        return check;           
     }
-    role; // This will cause a compile-time error because all possible cases have been handled, and role can never be anything else. Hence, the type of role is never.
+    // never acts as an alarm bell. It ensures that if you add a new role later, your code won't compile until you write the logic for it.
 }
 function neverReturn(): never {
     while (true) {
