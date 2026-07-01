@@ -33,11 +33,11 @@ type Employee = {
   salary: number | string;
 };
 type Staff = Person & Employee;
-const Staff: Staff = {
+const staff: Staff = {
   name: "John",
   salary: "Salary",
 };
-console.log(`${Staff.name} earns ${Staff.salary}`);
+console.log(`${staff.name} earns ${staff.salary}`);
 
 // Write divide(a: number, b: number): number that throws new Error("Cannot divide by zero") when b === 0. Call it inside a try/catch, and in catch log the message only if error instanceof Error.
 // divide(10, 2) → 5
@@ -120,8 +120,11 @@ console.log(describeAccount(acc));
 const currentDate = new Date();
 const currentYear: number = currentDate.getFullYear();
 const raw: unknown = "1990";
-const year: number = raw as string as unknown as number;
-console.log(currentYear - year);
+const year: number = Number(raw as string);
+console.log(currentYear - year);               
+
+// Create an Interface as interface Order { id: number; status: "pending" | "shipped" | "delivered"; readonly createdAt: string; note?: string; } then write the guard isOrder(obj: unknown): obj is Order. Then write processOrder(input: unknown): string that uses the guard and a switch on status to return a message for each status, or "Rejected: Invalid order" when the guard fails. Create an array of unknown[] with some valid and invalid orders, and use setInterval to call processOrder on each one every second.
+
 
 interface Order {
   id: number;
@@ -129,6 +132,7 @@ interface Order {
   readonly createdAt: string;
   note?: string;
 }
+
 const isOrder = (obj: unknown): obj is Order => {
   return (
     (
@@ -174,9 +178,11 @@ const orders: unknown[] = [
   { id: 6, status: "shipped", createdAt: "2023-10-06", note: 123 },
 ];
 let index = 0;
-setInterval(() => {
+const timer = setInterval(() => {
   if (index < orders.length) {
     console.log(processOrder(orders[index]));
     index++;
+  } else {
+    clearInterval(timer);
   }
 }, 1000);
