@@ -58,6 +58,37 @@ try {
   }
 }
 
+// Write parseAge(input: string): number that: converts input with Number(), if it's NaN → throw new Error("Not a valid age: " + input), if it's negative → throw new Error("Age cannot be negative"), otherwise returns the number.
+// Then, for each of ["25", "abc", "-5"], call parseAge inside a try/catch. In catch, log error.message only if error instanceof Error, otherwise log "Unknown error".
+// "25"  → Age is 25
+// "abc" → Error: Not a valid age: abc
+// "-5"  → Error: Age cannot be negative
+
+function parseAge(input: string): number {
+  const age = Number(input);
+  if (isNaN(age)) {
+    throw new Error("Not a valid age: " + input);
+  }
+  if (age < 0) {
+    throw new Error("Age cannot be negative: " + input);
+  } 
+  return age;
+}
+const ages: unknown[] = ["25", "-5", "abc", "30"];
+for (const a of ages) {
+  try {
+    console.log(parseAge(a as string));
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+  }
+  finally {
+    console.log("Finished processing age:", a);
+  }
+}
+
+
 // type Direction = "up" | "down" | "left" | "right".
 // Write move(dir: Direction): string using a switch. Handle all four, and in default assign dir to a const _exhaustive: never = dir;.
 // Then try adding "diagonal" to the union and watch TS force you to handle it.
@@ -121,10 +152,22 @@ const currentDate = new Date();
 const currentYear: number = currentDate.getFullYear();
 const raw: unknown = "1990";
 const year: number = Number(raw as string);
-console.log(currentYear - year);               
+console.log(currentYear - year);
+
+// Given const rawprice: unknown = " 250 ", assert it to a string, trim it, convert to a number, and return the total price after multiplying by 2. If the conversion fails (NaN), return -1.
+
+const rawprice: unknown = " 250 ";
+function getTotal(input: unknown): number {
+  const price = Number((input as string).trim());
+  if (isNaN(price)) {
+    return -1;
+  }
+  return price * 2;
+}
+console.log(getTotal(rawprice));
+console.log(getTotal("Hello"));
 
 // Create an Interface as interface Order { id: number; status: "pending" | "shipped" | "delivered"; readonly createdAt: string; note?: string; } then write the guard isOrder(obj: unknown): obj is Order. Then write processOrder(input: unknown): string that uses the guard and a switch on status to return a message for each status, or "Rejected: Invalid order" when the guard fails. Create an array of unknown[] with some valid and invalid orders, and use setInterval to call processOrder on each one every second.
-
 
 interface Order {
   id: number;
@@ -135,22 +178,15 @@ interface Order {
 
 const isOrder = (obj: unknown): obj is Order => {
   return (
-    (
     typeof obj === "object" &&
     obj !== null &&
     typeof (obj as Order).id === "number" &&
-    (
-        (obj as Order).status === "pending" ||
-        (obj as Order).status === "shipped" ||
-        (obj as Order).status === "delivered"
-    ) 
-    &&
+    ((obj as Order).status === "pending" ||
+      (obj as Order).status === "shipped" ||
+      (obj as Order).status === "delivered") &&
     typeof (obj as Order).createdAt === "string" &&
-    (
-        typeof (obj as Order).note === "undefined" ||
-        typeof (obj as Order).note === "string"
-    )
-)
+    (typeof (obj as Order).note === "undefined" ||
+      typeof (obj as Order).note === "string")
   );
 };
 const processOrder = (input: unknown): string => {
