@@ -94,18 +94,33 @@ const login = (credentials: Credentials) => {
 };
 login({ email: "Kanishkgupta2003", password: "Kanishk" });
 
-
 function gridTotal(grid: number[][]): number {
- let total = 0;
-  for (const row of grid){
-    for (const cell of row){
-        total += cell;
+  let total = 0;
+  for (const row of grid) {
+    for (const cell of row) {
+      total += cell;
     }
   }
   console.log(total);
   return total;
 }
+const gridiff = (grid: number[][]): number => {
+  let total = 0;
+  grid.forEach((row) => {
+    row.forEach((cell) => {
+      total -= cell;
+    });
+  });
+  console.log(total);
+  return total;
+};
+
 gridTotal([
+  [1, 2, 3],
+  [4, 5, 6],
+]);
+
+gridiff([
   [1, 2, 3],
   [4, 5, 6],
 ]);
