@@ -158,6 +158,15 @@ filterByCategory(menu, Category.VEG).map((item) =>
   console.log(summarize(item)),
 );
 
+// type Product = { readonly sku: string; name: string; stock: number }; Write a guard isProduct(obj: unknown): obj is Product. 
+// Write updateStock(product: Product, change: number): [ok: boolean, message: string] (a named tuple return!):
+// new stock = stock + change
+// if new stock would go below 0, throw new Error("Not enough stock") — catch it and return [false, "Not enough stock"]
+// otherwise return [true, "Stock updated to X"]
+// Test with a valid update and one that goes negative.
+// updateStock({sku:"A1",name:"Pen",stock:5},  -2) → [true,  "Stock updated to 3"]
+// updateStock({sku:"A1",name:"Pen",stock:5}, -10) → [false, "Not enough stock"]
+
 type Product = {
   readonly sku: string;
   name: string;
@@ -207,5 +216,7 @@ function runUpdate(product: Product, change: number): [ok: boolean, message: str
   }
 }
 console.log(runUpdate({ sku: "A1", name: "Pen", stock: 5 }, -2));
-console.log(runUpdate({ sku: "A1", name: "Pen", stock: 5 }, -10)); 
+console.log(runUpdate({ sku: "A1", name: "Pen", stock: 5 }, -10));
+console.log(runUpdate({ sku: "A1", name: "Pen" } as unknown as Product, -2)); 
+console.log(runUpdate("I am not a product" as unknown as Product, -2))
 
