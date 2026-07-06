@@ -104,6 +104,8 @@ function gridTotal(grid: number[][]): number {
   console.log(total);
   return total;
 }
+// Write gridiff(grid: number[][]): number that returns the negative of the total of all numbers in the grid. gridiff([[1,2,3],[4,5,6]]) → -21 and log it to the console. and also log the total of the grid using gridTotal([[1,2,3],[4,5,6]]) → 21
+
 const gridiff = (grid: number[][]): number => {
   let total = 0;
   grid.forEach((row) => {
@@ -124,3 +126,79 @@ gridiff([
   [1, 2, 3],
   [4, 5, 6],
 ]);
+
+// enum Category { Veg = "veg", NonVeg = "nonveg" }  type MenuItem = { name: string; price: number; category: Category }; Make an array of 4 MenuItems then add the.
+// filterByCategory(items: MenuItem[], cat: Category): MenuItem[] → use .filter.
+// summarize(item: Pick<MenuItem, "name" | "price">): string → "Pizza costs 500".
+// Filter to Veg, then loop and print each summary.
+
+enum Category {
+  VEG = "veg",
+  NON_VEG = "non-veg",
+}
+type MenuItem = {
+  name: string;
+  price: number;
+  category: Category;
+};
+const menu: MenuItem[] = [
+  { name: "Paneer Butter Masala", price: 250, category: Category.VEG },
+  { name: "Chicken Butter Masala", price: 300, category: Category.NON_VEG },
+  { name: "Veg Pulao", price: 200, category: Category.VEG },
+  { name: "Chicken Briyani", price: 350, category: Category.NON_VEG },
+  { name: "Dal Makhani", price: 220, category: Category.VEG },
+];
+function filterByCategory(items: MenuItem[], category: Category): MenuItem[] {
+  return items.filter((item) => item.category === category);
+}
+function summarize(items: Pick<MenuItem, "name" | "price">): string {
+  return `${items.name} costs ${items.price}`;
+}
+filterByCategory(menu, Category.VEG).map((item) =>
+  console.log(summarize(item)),
+);
+
+type Product = {
+  readonly sku: string;
+  name: string;
+  stock: number;
+};
+
+const isProduct = (obj: unknown): obj is Product => {
+  return (
+    typeof obj === "object" &&
+    obj !== null &&
+    typeof (obj as Product).sku === "string" &&
+    typeof (obj as Product).name === "string" &&
+    typeof (obj as Product).stock === "number"
+  );
+};
+
+// Keep the core function clean and focused on updating stock
+function updateStock(product: Product,change: number): [ok: boolean, message: string] {
+  if (!isProduct(product)) {
+    throw new Error("Invalid product");
+  }
+  if (product.stock + change < 0) {
+    throw new Error("Not enough stock");
+  } 
+  else {
+    product.stock += change;
+    return [true, `Stock updated to ${product.stock}`];
+  }
+}
+
+// Create a runner function to handle execution and catch the errors safely
+function runUpdate(product: Product, change: number): [ok: boolean, message: string] {
+  try {
+    return updateStock(product, change);
+  } catch (error) {
+    if (error instanceof Error) {
+      return [false, error.message];
+    }
+    return [false, "An unknown error occurred"];
+  }
+}
+console.log(runUpdate({ sku: "A1", name: "Pen", stock: 5 }, -2));
+console.log(runUpdate({ sku: "A1", name: "Pen", stock: 5 }, -10)); 
+
