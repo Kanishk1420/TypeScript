@@ -40,7 +40,7 @@ console.log(makeUser("Sam", 20));
 // orderCoffee("large", 2)  → "large coffee with 2 sugar"
 
 function OrderCoffee(size: string = "medium", sugar?: number): string {
-  return `Order: ${size} coffee with ${sugar ?? `no sugar`}`;
+  return `Order: ${size} coffee with ${sugar ?? `no `} sugar`;
 }
 console.log(OrderCoffee());
 console.log(OrderCoffee("large", 2));
@@ -176,8 +176,15 @@ const isProduct = (obj: unknown): obj is Product => {
 
 // Keep the core function clean and focused on updating stock
 function updateStock(product: Product,change: number): [ok: boolean, message: string] {
-  if (!isProduct(product)) {
-    throw new Error("Invalid product");
+  try{
+    if(!isProduct(product)) {
+      throw new Error("Invalid product");
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      return [false, error.message];
+    }
+    return [false, "An unknown error occurred"];
   }
   if (product.stock + change < 0) {
     throw new Error("Not enough stock");
