@@ -44,3 +44,68 @@ function OrderCoffee(size: string = "medium", sugar?: number): string {
 }
 console.log(OrderCoffee());
 console.log(OrderCoffee("large", 2));
+
+// type Profile = { name: string; email: string; age: number };
+// Write updateProfile(current: Profile, updates: Partial<Profile>): Profile that merges the changes and returns a new profile.
+// updateProfile({name:"Ana",email:"a@x.com",age:20}, { age: 21 }) → { name:"Ana", email:"a@x.com", age:21 }
+
+type Profile = {
+  name: string;
+  email: string;
+  age: number;
+};
+const updateProfile = (current: Profile, updates: Partial<Profile>) => {
+  return { ...current, ...updates };
+};
+console.log(
+  updateProfile(
+    { name: "Kanishk", email: "Kanishkgupta@outlook.com", age: 20 },
+    { age: 21, email: "Kanishkgupta2003@outlook.com" },
+  ),
+);
+
+// type User = { id: number; name: string; email: string; password: string };
+// type PublicUser = Omit<User, "password"> Write getPublic(user: User): PublicUser that returns the user without the password. type Credentials = Pick<User, "email" | "password"> — build one and log it.
+
+type User = {
+  id: number;
+  name: string;
+  email: string;
+  password: string;
+};
+type PublicUser = Omit<User, "password">;
+function getPublic(user: User): PublicUser {
+  const { password, ...publicUser } = user;
+  return publicUser;
+}
+console.log(
+  getPublic({
+    id: 1,
+    name: "Kanishk",
+    email: "Kanishkgupta2003",
+    password: "Kanishk",
+  }),
+);
+type Credentials = Pick<User, "email" | "password">; // this is a type with only email and password the login screen needs
+const login = (credentials: Credentials) => {
+  console.log(
+    `Logging in with email: ${credentials.email} and password: ${credentials.password}`,
+  );
+};
+login({ email: "Kanishkgupta2003", password: "Kanishk" });
+
+
+function gridTotal(grid: number[][]): number {
+ let total = 0;
+  for (const row of grid){
+    for (const cell of row){
+        total += cell;
+    }
+  }
+  console.log(total);
+  return total;
+}
+gridTotal([
+  [1, 2, 3],
+  [4, 5, 6],
+]);
