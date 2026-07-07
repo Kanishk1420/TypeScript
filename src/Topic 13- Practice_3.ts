@@ -273,7 +273,7 @@ function buildUrl(
   path: string,
   port?: number,
 ): string {
-  const url = `${protocol}://${domain}/${port ? `:${port}` : ""}/${path}`;
+  const url = `${protocol}://${domain}${port ? `:${port}` : ""}/${path}`;
   return url;
 }
 console.log(buildUrl(Protocol.FTP, "google.com", "path/to/resource", 8080));
@@ -286,7 +286,7 @@ type Movie = {
   budget: number;
 };
 
-// Write a function MovieDetails(movie: Pick<Movie, "title" | "year" | "rating" | "budget"| "director">): string that returns a string like "Openhiemer (2024) - Rating: 9.10". Then change it to use Omit<Movie, "director" | "budget"> instead of Pick. Log the result to the console.
+// Write a function MovieDetails(movie: Pick<Movie, "title" | "year" | "rating" | "budget"| "director">): string that returns a string like "Openhiemer (2024) - Rating: 9.1". Then change it to use Omit<Movie, "director" | "budget"> instead of Pick. Log the result to the console.
 
 let MovieDetails = (
   movie: Pick<Movie, "title" | "year" | "rating" | "budget" | "director">,
@@ -381,6 +381,16 @@ Members.filter((member) => canEdit(member)).map((member) =>
   console.log(`${member.name} can edit because they are ${member.role}`),
 );
 
+// enum Genre { Fiction = "fiction", Science = "science", History = "history" }
+// type Book = { readonly isbn: string; title: string; genre: Genre; copies: number };
+// Guard isBook(obj: unknown): obj is Book.
+// borrow(book: Book): [ok: boolean, message: string]:
+// if copies === 0 → [false, "Out of stock"]
+// else decrement copies and return [true, "Borrowed: TITLE"]
+// Make a Book[] (include one with copies: 0), loop, and try borrowing each.
+// [ true,  "Borrowed: Dune" ]
+// [ false, "Out of stock" ]
+
 enum Genre {
   Fiction = "fiction",
   Science = "science",
@@ -402,7 +412,10 @@ function isBook(obj: unknown): obj is Book {
     typeof (obj as Book).copies === "number"
   );
 }
-function borrow(book: Book): [ok: boolean, message: string] {
+function borrow(book: unknown): [ok: boolean, message: string] {
+  if (!isBook(book)) {
+    return [false, "Invalid book"];
+  }
   if (book.copies <= 0) {
     return [false, "Out of Stock"];
   } else {
@@ -435,5 +448,8 @@ const Book: Book[] = [
 ];
 Book.map((book) => {
   const [ok, message] = borrow(book);
-  console.log(message);
+  console.log(ok, message);
 });
+
+console.log(borrow("I am not a book"));
+console.log(borrow({ title: "No ISBN here" })); 
