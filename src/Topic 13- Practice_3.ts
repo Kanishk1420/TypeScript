@@ -158,7 +158,7 @@ filterByCategory(menu, Category.VEG).map((item) =>
   console.log(summarize(item)),
 );
 
-// type Product = { readonly sku: string; name: string; stock: number }; Write a guard isProduct(obj: unknown): obj is Product. 
+// type Product = { readonly sku: string; name: string; stock: number }; Write a guard isProduct(obj: unknown): obj is Product.
 // Write updateStock(product: Product, change: number): [ok: boolean, message: string] (a named tuple return!):
 // new stock = stock + change
 // if new stock would go below 0, throw new Error("Not enough stock") — catch it and return [false, "Not enough stock"]
@@ -184,9 +184,12 @@ const isProduct = (obj: unknown): obj is Product => {
 };
 
 // Keep the core function clean and focused on updating stock
-function updateStock(product: Product,change: number): [ok: boolean, message: string] {
-  try{
-    if(!isProduct(product)) {
+function updateStock(
+  product: Product,
+  change: number,
+): [ok: boolean, message: string] {
+  try {
+    if (!isProduct(product)) {
       throw new Error("Invalid product");
     }
   } catch (error) {
@@ -197,15 +200,17 @@ function updateStock(product: Product,change: number): [ok: boolean, message: st
   }
   if (product.stock + change < 0) {
     throw new Error("Not enough stock");
-  } 
-  else {
+  } else {
     product.stock += change;
     return [true, `Stock updated to ${product.stock}`];
   }
 }
 
 // Create a runner function to handle execution and catch the errors safely
-function runUpdate(product: Product, change: number): [ok: boolean, message: string] {
+function runUpdate(
+  product: Product,
+  change: number,
+): [ok: boolean, message: string] {
   try {
     return updateStock(product, change);
   } catch (error) {
@@ -217,6 +222,215 @@ function runUpdate(product: Product, change: number): [ok: boolean, message: str
 }
 console.log(runUpdate({ sku: "A1", name: "Pen", stock: 5 }, -2));
 console.log(runUpdate({ sku: "A1", name: "Pen", stock: 5 }, -10));
-console.log(runUpdate({ sku: "A1", name: "Pen" } as unknown as Product, -2)); 
-console.log(runUpdate("I am not a product" as unknown as Product, -2))
+console.log(runUpdate({ sku: "A1", name: "Pen" } as unknown as Product, -2));
+console.log(runUpdate("I am not a product" as unknown as Product, -2));
 
+// enum Day { Mon = 1, Tue, Wed, Thu, Fri, Sat, Sun }
+// Write isWeekend(day: Day): boolean → true only for Sat/Sun.
+// isWeekend(Day.Sat) → true
+// isWeekend(Day.Mon) → false
+
+enum Day {
+  MON = 1,
+  TUE,
+  WED,
+  THU,
+  FRI,
+  SAT,
+  SUN,
+}
+function isWeekend(day: Day): boolean {
+  if (day === Day.SAT || day === Day.SUN) {
+    return true;
+  }
+  return false;
+}
+console.log(isWeekend(Day.SAT));
+console.log(isWeekend(Day.MON));
+
+// type Point = readonly [x: number, y: number];
+// Write distance(p: Point): number = distance from origin = √(x² + y²), rounded to 2 decimals.
+// distance([3, 4]) → 5
+
+type Point = readonly [x: number, y: number];
+const distance = (p: Point): number => {
+  return Number(Math.sqrt(p[0] * p[0] + p[1] * p[1]).toFixed(2));
+};
+console.log(distance([4, 3]));
+
+// Write buildUrl(protocol: string = "https", domain: string, path: string, port?: number): string → "https://google.com:8080/path/to/resource" (omit the port if not provided). Log it to the console.
+
+enum Protocol {
+  HTTP = "http",
+  HTTPS = "https",
+  FTP = "ftp",
+  SMTP = "smtp",
+}
+
+function buildUrl(
+  protocol: string,
+  domain: string,
+  path: string,
+  port?: number,
+): string {
+  const url = `${protocol}://${domain}/${port ? `:${port}` : ""}/${path}`;
+  return url;
+}
+console.log(buildUrl(Protocol.FTP, "google.com", "path/to/resource", 8080));
+
+type Movie = {
+  title: string;
+  year: number;
+  rating: number;
+  director: string;
+  budget: number;
+};
+
+// Write a function MovieDetails(movie: Pick<Movie, "title" | "year" | "rating" | "budget"| "director">): string that returns a string like "Openhiemer (2024) - Rating: 9.10". Then change it to use Omit<Movie, "director" | "budget"> instead of Pick. Log the result to the console.
+
+let MovieDetails = (
+  movie: Pick<Movie, "title" | "year" | "rating" | "budget" | "director">,
+): string => {
+  return `${movie.title} (${movie.year}) - Rating: ${movie.rating}`;
+};
+MovieDetails = (movie: Omit<Movie, "director" | "budget">): string => {
+  return `${movie.title} (${movie.year}) - Rating: ${movie.rating}`;
+};
+console.log(
+  MovieDetails({
+    title: "Openhiemer",
+    year: 2024,
+    rating: 9.1,
+    director: "Christopher Nolan",
+    budget: 160000000,
+  }),
+);
+
+// type Settings = { theme: string; fontSize: number; autosave: boolean };
+// const DEFAULTS: Settings = { theme: "light", fontSize: 14, autosave: true };
+// Write applyDefaults(user: Partial<Settings>): Required<Settings> that fills missing fields from DEFAULTS.
+// applyDefaults({ theme: "dark" }) → { theme: "dark", fontSize: 14, autosave: true }
+
+type Settings = {
+  theme: "light" | "dark";
+  fontSize: number;
+  autosave: boolean;
+};
+const DEFAULTS: Settings = {
+  theme: "dark",
+  fontSize: 14,
+  autosave: true,
+};
+function applyDefaults(user: Partial<Settings>): Required<Settings> {
+  return { ...DEFAULTS, ...user };
+}
+console.log(applyDefaults({ theme: "light" }));
+
+// const cart = [{ item: "Pen", price: 10 }, { item: "Book", price: 50 }, { item: "Bag", price: 200 }];
+// Names of items priced ≥ 50 (.filter then .map).
+// Total of all prices (.reduce).
+// expensive → ["Book", "Bag"]
+// total     → 260
+// .reduce is new — it "folds" a list into one value: cart.reduce((sum, x) => sum + x.price, 0). The 0 is the starting sum.
+
+const cart = [
+  {
+    item: "Pen",
+    price: 10,
+  },
+  {
+    item: "Book",
+    price: 50,
+  },
+  {
+    item: "Bag",
+    price: 200,
+  },
+];
+cart
+  .filter((item) => item.price >= 50)
+  .map((item) => console.log(`Item: ${item.item}, Price: ${item.price}`));
+console.log(`Total Price: ${cart.reduce((sum, x) => sum + x.price, 0)}`);
+
+// enum Role { Admin = "admin", Editor = "editor", Viewer = "viewer" }
+// interface Member { name: string; role: Role }
+// canEdit(member: Member): boolean → true for Admin or Editor.
+// Filter a Member[] to only those who can edit, and print their names.
+
+enum Role {
+  Admin = "admin",
+  Editor = "editor",
+  Viewer = "viewer",
+}
+interface Member {
+  name: string;
+  role: Role;
+}
+
+function canEdit(member: Member): boolean {
+  if (member.role === Role.Admin || member.role === Role.Editor) return true;
+  return false;
+}
+const Members: Member[] = [
+  { name: "Alice", role: Role.Admin },
+  { name: "Bob", role: Role.Editor },
+  { name: "Charlie", role: Role.Viewer },
+];
+
+Members.filter((member) => canEdit(member)).map((member) =>
+  console.log(`${member.name} can edit because they are ${member.role}`),
+);
+
+enum Genre {
+  Fiction = "fiction",
+  Science = "science",
+  History = "history",
+}
+type Book = {
+  readonly isbn: string;
+  title: string;
+  genre: Genre;
+  copies: number;
+};
+function isBook(obj: unknown): obj is Book {
+  return (
+    typeof obj === "object" &&
+    obj !== null &&
+    typeof (obj as Book).isbn === "string" &&
+    typeof (obj as Book).title === "string" &&
+    Object.values(Genre).includes((obj as Book).genre) &&
+    typeof (obj as Book).copies === "number"
+  );
+}
+function borrow(book: Book): [ok: boolean, message: string] {
+  if (book.copies <= 0) {
+    return [false, "Out of Stock"];
+  } else {
+    book.copies -= 1;
+    return [true, `Borrowed ${book.title} and its remaining copies are ${book.copies}`];
+  }
+}
+const Book: Book[] = [
+  {
+    isbn: "978-3-16-148410-0",
+    title: "The Great Gatsby",
+    genre: Genre.Fiction,
+    copies: 5,
+  },
+  {
+    isbn: "978-0-14-044913-6",
+    title: "A Brief History of Time",
+    genre: Genre.Science,
+    copies: 2,
+  },
+  {
+    isbn: "978-0-307-26293-5",
+    title: "Sapiens: A Brief History of Humankind",
+    genre: Genre.History,
+    copies: 0,
+  },
+];
+Book.map((book) => {
+  const [ok, message] = borrow(book);
+  console.log(message);
+});
