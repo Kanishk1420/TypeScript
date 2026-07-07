@@ -407,7 +407,10 @@ function borrow(book: Book): [ok: boolean, message: string] {
     return [false, "Out of Stock"];
   } else {
     book.copies -= 1;
-    return [true, `Borrowed ${book.title} and its remaining copies are ${book.copies}`];
+    return [
+      true,
+      `Borrowed ${book.title} and its remaining copies are ${book.copies}`,
+    ];
   }
 }
 const Book: Book[] = [
