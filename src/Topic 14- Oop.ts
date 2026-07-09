@@ -93,8 +93,12 @@ dog.makeSound();
 // Class Composition
  
 class Summer {
-    icecream(){}
-    colddrink(){}
+    icecream(){
+      console.log("Enjoying ice cream in summer!");
+    }
+    colddrink(){
+      console.log("Refreshing with a cold drink!");
+    }
 }
 class Use {
     constructor(private summer: Summer) {}
@@ -103,3 +107,9 @@ class Use {
         this.summer.colddrink();
     }
 }
+
+const summer = new Summer();
+const use = new Use(summer);
+use.enjoy();
+
+const url = "https://excalidraw.com/#json=MrtYTNm5Kv2Db67PArcBQ,EPBwYUpR-C8sr8wPCXgLRQ";
