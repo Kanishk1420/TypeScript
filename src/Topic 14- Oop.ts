@@ -91,25 +91,41 @@ const dog = new Dog();
 dog.makeSound();
 
 // Class Composition
- 
+
 class Summer {
-    icecream(){
-      console.log("Enjoying ice cream in summer!");
-    }
-    colddrink(){
-      console.log("Refreshing with a cold drink!");
-    }
+  icecream() {
+    console.log("Enjoying ice cream in summer!");
+  }
+  colddrink() {
+    console.log("Refreshing with a cold drink!");
+  }
 }
 class Use {
-    constructor(private summer: Summer) {}
-    enjoy() {
-        this.summer.icecream();
-        this.summer.colddrink();
-    }
+  constructor(private summer: Summer) {}
+  enjoy() {
+    this.summer.icecream();
+    this.summer.colddrink();
+  }
 }
 
 const summer = new Summer();
 const use = new Use(summer);
 use.enjoy();
 
-const url = "https://excalidraw.com/#json=MrtYTNm5Kv2Db67PArcBQ,EPBwYUpR-C8sr8wPCXgLRQ";
+class Winter {
+  hotchocolate() {
+    console.log("Enjoying hot chocolate in winter!");
+  }
+  hotdrink() {
+    console.log("Warming up with a hot drink!");
+  }
+}
+class UseWinter {
+  constructor(private winter: Winter) {
+    this.winter.hotdrink();
+    this.winter.hotchocolate();
+  }
+}
+const winter = new Winter();
+const useWinter = new UseWinter(winter);
+console.log(useWinter);
