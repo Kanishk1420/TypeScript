@@ -104,3 +104,29 @@ const response: ApiPromise<{ flavour: string; taste: string }> = {
   content: { flavour: "Vanilla", taste: "Sweet" },
 };
 console.log(response.status, response.content.flavour, response.content.taste);
+
+// Plucking a Property refers to you want to select or pull only the columns of names or only the columns of IDs from the spreadsheet. In TypeScript, we can use keyof operator to pluck a property from an object type.
+
+interface person {
+  id: number;
+  name: string;
+}
+// keyof User is literally the list: "id" | "name"
+// Person["id"]   evaluates to: number
+// Person["name"] evaluates to: string
+
+function pluck<T, K extends keyof T>(array: T[], key: K): T[K][] {
+  return array.map((item) => item[key]);
+} 
+// T is placeholder for whatever object type is inside the array.
+// K is placeholder for the property name you want to pull.
+// extends keyof T means means The value of key must belong to the list of properties inside T." This is what triggers the compile error if you type a typo like "nae" instead of "name".
+
+const users: person[] = [
+  { id: 1, name: "Alice" },
+  { id: 2, name: "Bob" },
+  { id: 3, name: "Charlie" },
+];
+const names = pluck(users, "name");
+const ids = pluck(users, "id");
+console.log(names, ids);
