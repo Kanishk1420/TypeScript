@@ -290,5 +290,4 @@ function reportDimensions(Coord: Coordinate) {
   }
 }
 reportDimensions([10, 20]);
-
-
+reportDimensions([10, 20, 30]);
