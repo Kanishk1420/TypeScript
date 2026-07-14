@@ -220,13 +220,13 @@ type Product = {
   price: number;
 };
 
-const userApiResponse: ApiResponse< User[]> = {
+const userApiResponse: ApiResponse<User[]> = {
   status: 200,
   success: true,
   payload: [
-    { id: 1, name: "John Doe"},
-    { id: 2, name: "Jane Smith"},
-    { id: 3, name: "Alice Johnson"},
+    { id: 1, name: "John Doe" },
+    { id: 2, name: "Jane Smith" },
+    { id: 3, name: "Alice Johnson" },
   ],
 };
 const productApiResponse: ApiResponse<Product[]> = {
@@ -244,7 +244,7 @@ console.log(
   userApiResponse.payload,
   productApiResponse.status,
   productApiResponse.success,
-  productApiResponse.payload
+  productApiResponse.payload,
 );
 
 // Q10.Define a type requiring only a size property. Now: Store an object with size, material, and weight in a variable, then assign that variable to your type. Does it compile?
