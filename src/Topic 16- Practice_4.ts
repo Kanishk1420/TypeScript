@@ -2,9 +2,12 @@
 // Q1. Model a bank account. The balance must be readable from outside, but it must be impossible to change it by direct assignment — deposits and withdrawals may only happen through methods. Withdrawing more than the balance must raise an error. Demonstrate a successful deposit, a successful withdrawal, and a rejected over-withdrawal. In a comment, show the line that would fail if someone tried to assign the balance directly.
 
 class Bank {
-  money: number;
+  private money: number;
   constructor(money: number) {
     this.money = money;
+  }
+  get balance(): number {
+    return this.money;
   }
   deposit(amount: number) {
     this.money += amount;
@@ -12,14 +15,15 @@ class Bank {
   }
   withdraw(amount: number) {
     if (amount > this.money) {
-      console.log(`Insufficient funds. Current balance: ${this.money}`);
+      throw new Error(`Insufficient funds. Current balance: ${this.money}`);
     } else {
       this.money -= amount;
       console.log(`Withdrew ${amount}. New balance: ${this.money}`);
     }
   }
 }
-const bank = new Bank(1000);
+const bank = new Bank(2000);
+console.log(`Initial balance: ${bank.balance}`);
 bank.deposit(500);
 bank.withdraw(200);
 
@@ -35,9 +39,7 @@ class Circle extends Shape {
     this.radius = radius;
   }
   getArea(): number {
-    return (Math.PI * this.radius * this.radius).toFixed(
-      2,
-    ) as unknown as number;
+    return Number((Math.PI * this.radius * this.radius).toFixed(2));
   }
 }
 class Rectangle extends Shape {
@@ -217,20 +219,32 @@ type Product = {
   product: string;
   price: number;
 };
-type response = User & Product;
-const userApiResponse: ApiResponse<response[]> = {
+
+const userApiResponse: ApiResponse< User[]> = {
   status: 200,
   success: true,
   payload: [
-    { id: 1, name: "John Doe", product: "Laptop", price: 1000 },
-    { id: 2, name: "Jane Smith", product: "Smartphone", price: 500 },
-    { id: 3, name: "Alice Johnson", product: "Tablet", price: 300 },
+    { id: 1, name: "John Doe"},
+    { id: 2, name: "Jane Smith"},
+    { id: 3, name: "Alice Johnson"},
+  ],
+};
+const productApiResponse: ApiResponse<Product[]> = {
+  status: 200,
+  success: true,
+  payload: [
+    { product: "Laptop", price: 1200 },
+    { product: "Smartphone", price: 800 },
+    { product: "Headphones", price: 150 },
   ],
 };
 console.log(
   userApiResponse.status,
   userApiResponse.success,
   userApiResponse.payload,
+  productApiResponse.status,
+  productApiResponse.success,
+  productApiResponse.payload
 );
 
 // Q10.Define a type requiring only a size property. Now: Store an object with size, material, and weight in a variable, then assign that variable to your type. Does it compile?
@@ -245,6 +259,7 @@ const box = {
 };
 const itemA: Sizable = box;
 console.log(itemA);
+// const itemB: Sizable = { size: 20, material: "Steel", weight: 50 }; // This will give an error because the object literal has extra properties that are not defined in the Sizable interface.
 
 // Q11. Declare a tuple of exactly [string, number] and give it two values. Now call .push() on it with a third value.
 // Does TypeScript complain?
