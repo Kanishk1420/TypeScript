@@ -101,9 +101,6 @@ class Temperature {
     this._celsius = calculatedCelsius;
   }
 }
-
-// Q5. A Car needs an engine's capabilities (start, stop). Build this without using inheritance. Then, in a comment, justify why this design is preferable to making Car extend Engine.
-
 const temp = new Temperature(25.0);
 console.log(`Reading in Fahrenheit: ${temp.farenheit}°F`);
 console.log(`Changing Fahrenheit to 32°F...`);
@@ -115,8 +112,12 @@ try {
 } catch (error) {
   if (error instanceof Error) {
     console.log(error.message);
+  } else {
+    console.log("An unexpected error occurred.");
   }
 }
+
+// Q5. A Car needs an engine's capabilities (start, stop). Build this without using inheritance. Then, in a comment, justify why this design is preferable to making Car extend Engine.
 
 class Engine {
   start(): void {
@@ -220,11 +221,59 @@ type response = User & Product;
 const userApiResponse: ApiResponse<response[]> = {
   status: 200,
   success: true,
-    payload: [
+  payload: [
     { id: 1, name: "John Doe", product: "Laptop", price: 1000 },
     { id: 2, name: "Jane Smith", product: "Smartphone", price: 500 },
     { id: 3, name: "Alice Johnson", product: "Tablet", price: 300 },
   ],
 };
-console.log(userApiResponse.status, userApiResponse.success, userApiResponse.payload);
+console.log(
+  userApiResponse.status,
+  userApiResponse.success,
+  userApiResponse.payload,
+);
+
+// Q10.Define a type requiring only a size property. Now: Store an object with size, material, and weight in a variable, then assign that variable to your type. Does it compile?
+
+interface Sizable {
+  size: number;
+}
+const box = {
+  size: 10,
+  material: "Uranium",
+  weight: 100,
+};
+const itemA: Sizable = box;
+console.log(itemA);
+
+// Q11. Declare a tuple of exactly [string, number] and give it two values. Now call .push() on it with a third value.
+// Does TypeScript complain?
+// What does the array actually contain at runtime?
+// What does this reveal about how much tuples really protect you?
+
+const tuple: [string, number] = ["World", 42];
+tuple.push(0.4, 0.8);
+console.log(tuple);
+tuple.unshift("Hello");
+console.log(tuple);
+
+// Q12.Given a readonly array of strings, determine which of these compile and which fail, and why: push, map, filter, sort, index access [0], and spreading it into a brand-new array.
+
+const array: readonly number[] = [1, 2, 3, 2, 4, 3, 6, 2];
+console.log(array.map((num) => num * 2));
+console.log(array.toSorted((a, b) => a - b));
+console.log(array.filter((num) => num > 1));
+
+// Q13.Represent a coordinate that may be either 2D or 3D using a single tuple type. Write one function that accepts it and correctly reports whether it's 2D or 3D.
+
+type Coordinate = [number, number, number?];
+function reportDimensions(Coord: Coordinate) {
+  if (Coord.length === 2) {
+    console.log(`2D Coordinate: (${Coord[0]}, ${Coord[1]})`);
+  } else {
+    console.log(`3D Coordinate: (${Coord[0]}, ${Coord[1]}, ${Coord[2]})`);
+  }
+}
+reportDimensions([10, 20]);
+
 
