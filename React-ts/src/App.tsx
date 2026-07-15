@@ -2,6 +2,7 @@ import { Card } from "./components/Card";
 import Counter from "./components/Counter";
 import List from "./components/List";
 import { OrderForm } from "./components/OrderForm";
+import TypeCard from "./components/TypeCard";
 import type { Todo } from './types';
 const menu: Todo[] = [
   { id: 1, name: "Headphones", price: 100 },
@@ -20,6 +21,9 @@ const App = () => {
       <OrderForm onSubmit={(order) => {
         console.log(`Order received: ${order.name}, ${order.cups} cups, Price: ${order.price}`);
       }}/>
+      <TypeCard title= "Special Offer"
+       footer= {"Get it now!"}
+       />
     </div>
   );
 };
