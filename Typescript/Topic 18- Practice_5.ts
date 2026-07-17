@@ -96,3 +96,8 @@ getSafeTodo(2)
 // render({ status: "success", data: todo })          → "Loaded: delectus aut autem"
 // render({ status: "error", message: "404" })        → "Failed: 404"
 // This is a discriminated union — status is the "tag". Inside case "success": TS automatically knows data exists. Try adding a 4th state and watch never scream.
+
+// trevy
+// helm
+// falco
+// azure cni
