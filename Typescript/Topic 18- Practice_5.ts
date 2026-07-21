@@ -75,29 +75,3 @@ async function getSafeTodo(id: number): Promise<Todo> {
 getSafeTodo(2)
   .then((todo) => console.log(todo))
   .catch((error) => console.error("Error fetching todo:", error));
-
-//Q4 — Generic fetch helper (T15 generics)
-// Write fetchJson<T>(url: string): Promise<T> — one helper, any endpoint, no any.
-
-
-// const todo  = await fetchJson<Todo>(".../todos/1");
-// const todos = await fetchJson<Todo[]>(".../todos");
-// Just like your wrapinarray<T> — the caller picks T.
-
-// Q5 — Three-state union (T3 + T7 never) 
-// type FetchState<T> =
-//   | { status: "loading" }
-//   | { status: "success"; data: T }
-//   | { status: "error"; message: string };
-// Write render(state: FetchState<Todo>): string with a switch on status + a never default.
-
-
-// render({ status: "loading" })                      → "Loading..."
-// render({ status: "success", data: todo })          → "Loaded: delectus aut autem"
-// render({ status: "error", message: "404" })        → "Failed: 404"
-// This is a discriminated union — status is the "tag". Inside case "success": TS automatically knows data exists. Try adding a 4th state and watch never scream.
-
-// trevy
-// helm
-// falco
-// azure cni
